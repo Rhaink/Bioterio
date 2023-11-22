@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-rj86u7=crt+ferjlyw(k(_w1j2cj((&mj=lor50k*$f@1*x2nt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bioterio.azurewebsites.net', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
