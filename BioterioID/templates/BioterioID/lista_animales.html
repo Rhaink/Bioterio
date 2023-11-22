@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Animales</title>
+</head>
+<body>
+    <h1>Animales en Bioterio</h1>
+    <ul>
+    {% for animal in animales %}
+        <li>{{ animal.numero_identificacion }} - {{ animal.tipo_animal }} - {{ animal.sexo }}</li>
+    {% empty %}
+        <li>No hay animales registrados.</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
