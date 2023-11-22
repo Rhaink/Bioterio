@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/a05806cf-bf68-40c1-b4cb-3c8fc8fcfe24/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/Bioterio",
+    "appService.deploySubpath": "."
+}
