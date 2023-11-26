@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from openpyxl import Workbook
-from .models import Animal, RegistroDiario
+from .models import AnimalBio, RegistroDiario
 from django.contrib import admin
 
 def exportar_registros_a_excel(modeladmin, request, queryset):
@@ -20,9 +20,9 @@ def exportar_registros_a_excel(modeladmin, request, queryset):
     # Datos
     for registro in queryset:
         fila = [
-            registro.animal.numero_identificacion, registro.fecha, 
-            registro.peso_gramos, registro.medidas_cm, 
-            registro.consumo_alimento_gramos, registro.consumo_agua_ml
+            registro.animal.numero_identificacion, registro.fecha_registro.replace(tzinfo=None), 
+            registro.peso_gramos_registro, registro.medidas_cm_registro, 
+            registro.consumo_alimento_gramos_registro, registro.consumo_agua_ml_registro
         ]
         ws.append(fila)
 
@@ -32,8 +32,8 @@ def exportar_registros_a_excel(modeladmin, request, queryset):
 exportar_registros_a_excel.short_description = "Exportar a Excel"
 
 class RegistroDiarioAdmin(admin.ModelAdmin):
-    list_display = ('animal', 'fecha', 'peso_gramos', 'medidas_cm')
+    list_display = ('animal', 'fecha_registro', 'peso_gramos_registro', 'medidas_cm_registro')
     actions = [exportar_registros_a_excel]
 
-admin.site.register(Animal)
+admin.site.register(AnimalBio)
 admin.site.register(RegistroDiario, RegistroDiarioAdmin)

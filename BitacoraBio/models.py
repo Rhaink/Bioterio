@@ -1,39 +1,35 @@
 from django.db import models
+from BioterioID.models import Animal
 
-class Animal(models.Model):
-    TIPO_ANIMAL_OPCIONES = [
-        ('rata', 'Rata'),
-        ('raton', 'Ratón'),
-        ('cobayo', 'Cobayo'),
-        ('conejo', 'Conejo'),
-        ('ave', 'Ave'),
-        ('gato', 'Gato'),
-    ]
-    
-    numero_identificacion = models.CharField(max_length=50, unique=True)
-    tipo_animal = models.CharField(max_length=6, choices=TIPO_ANIMAL_OPCIONES)
-    sepa = models.CharField(max_length=100)
+class AnimalBio(models.Model):
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE, verbose_name='ID Animal')
     marca = models.CharField(max_length=100)
-    por_parto = models.BooleanField(default=False)
-    numero_parto = models.IntegerField(blank=True, null=True)
-    por_cruce = models.BooleanField(default=False)
+    por_parto = models.BooleanField(default=False, verbose_name='Por Parto')
+    por_cruce = models.BooleanField(default=False, verbose_name='Por Cruce')
     separacion = models.BooleanField(default=False)
-    en_destete = models.BooleanField(default=False)
-    fecha_fin_destete = models.DateField(blank=True, null=True)
-    numero_crias_camada = models.IntegerField(blank=True, null=True)
-    observaciones = models.TextField(blank=True)
+    en_destete = models.BooleanField(default=False, verbose_name='En Destete')
+    fecha_destete_bio= models.DateTimeField(blank=True, null=True, verbose_name='Fecha de Destete')
+    numero_crias_camada = models.IntegerField(blank=True, null=True, verbose_name='Número de Crías en Camada')
 
     def __str__(self):
-        return self.numero_identificacion
+        return self.animal.numero_identificacion
+
+    class Meta:
+        verbose_name = "Identificación Bitácora"
+        verbose_name_plural = "Identificación Bitácora"
 
 class RegistroDiario(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
-    fecha = models.DateField()
-    peso_gramos = models.DecimalField(max_digits=6, decimal_places=2)
-    medidas_cm = models.DecimalField(max_digits=6, decimal_places=2)
-    consumo_alimento_gramos = models.DecimalField(max_digits=6, decimal_places=2)
-    consumo_agua_ml = models.DecimalField(max_digits=6, decimal_places=2)
+    fecha_registro= models.DateTimeField(blank=True, null=True, verbose_name='Fecha de Registro')
+    peso_gramos_registro = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Peso en gramos')
+    medidas_cm_registro = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Medidas en cm')
+    consumo_alimento_gramos_registro = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Alimentos en gramos')
+    consumo_agua_ml_registro = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Agua en ml')
 
     def __str__(self):
-        return f"{self.animal.numero_identificacion} - {self.fecha}"
+        return f"{self.animal.numero_identificacion} - {self.fecha_registro}"
+    
+    class Meta:
+        verbose_name = "Registro Diario"
+        verbose_name_plural = "Registro Diario"
 

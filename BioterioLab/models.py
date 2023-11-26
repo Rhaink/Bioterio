@@ -1,37 +1,45 @@
 from django.db import models
-from django.contrib.auth.models import User
+from BioterioID.models import Animal
 
-class Animal(models.Model):
-    TIPO_ANIMAL_OPCIONES = [
-        ('rata', 'Rata'),
-        ('raton', 'Ratón'),
-        ('cobayo', 'Cobayo'),
-        ('conejo', 'Conejo'),
-        ('ave', 'Ave'),
-        ('gato', 'Gato'),
+class AnimalLab(models.Model):
+    ESTADO_OPCIONES = [
+        ('lactante', 'Lactante'),
+        ('adulto', 'Adulto'),
+        ('gestante', 'Gestante'),
     ]
-    
-    numero_identificacion = models.CharField(max_length=50, unique=True)
-    tipo_animal = models.CharField(max_length=6, choices=TIPO_ANIMAL_OPCIONES)
-    sepa = models.CharField(max_length=100)
-    es_lactante = models.BooleanField(default=False)
-    es_adulto = models.BooleanField(default=False)
-    es_gestante = models.BooleanField(default=False)
-    observaciones = models.TextField(blank=True)
-    usuarios_acceso = models.ManyToManyField(User, blank=True)
+        
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE, verbose_name='ID Animal')
+    estado_animal = models.CharField(max_length=8, choices=ESTADO_OPCIONES, verbose_name='Estado del Animal', default='adulto')
 
     def __str__(self):
-        return f"{self.tipo_animal} - {self.numero_identificacion}"
+        return f"{self.animal.tipo_animal} - {self.animal.numero_identificacion}"
     
-class AnimalProduccion(Animal):
-    historial_pesos = models.TextField(blank=True)
-    historial_consumo_alimento = models.TextField(blank=True)
-    historial_consumo_agua = models.TextField(blank=True)
-    es_por_parto = models.BooleanField(default=False)
-    numero_parto = models.PositiveIntegerField(blank=True, null=True)
+class AnimalProduccion(AnimalLab):
+    NACIMIENTO_OPCIONES = [
+        ('natural', 'Parto Natural'),
+        ('in vitro', 'In Vitro'),
+    ]
+        
+    fecha_produccion= models.DateTimeField(blank=True, null=True, verbose_name='Fecha de Producción')
+    peso_gramos_produccion = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Peso en gramos')
+    medidas_cm_produccion = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Medidas en cm')
+    consumo_alimento_gramos_produccion = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Alimentos en gramos')
+    consumo_agua_ml_produccion = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Agua en ml')
+    tipo_nacimiento = models.CharField(max_length=8, choices=NACIMIENTO_OPCIONES, verbose_name='Tipo de Nacimiento', default='natural')
 
-class AnimalInvestigacion(Animal):
-    fecha_nacimiento = models.DateField()
-    fecha_destete = models.DateField(blank=True, null=True)
+    def __str__(self):
+        return f"{self.animal.numero_identificacion} - {self.fecha_produccion}"
+
+    class Meta:
+        verbose_name = "Producción"
+        verbose_name_plural = "Producción"
+
+class AnimalInvestigacion(AnimalLab):
+    fecha_destete= models.DateTimeField(blank=True, null=True, verbose_name='Fecha de Destete')
+
+    class Meta:
+        verbose_name = "Investigación"
+        verbose_name_plural = "Investigación"
+
 
 
